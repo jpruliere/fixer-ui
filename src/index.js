@@ -8,6 +8,19 @@ import apikey from './api-key'; // pensez à générer votre clé API
  * export default apikey;
  */
 
+// la liste des devises supportées
+// pour bien faire, il faudrait d'ailleurs regrouper ça et l'apikey dans un config.js par exemple
+// et penser à le "gitignorer" du coup
+const devisesSupportees = {
+    USD: 'Dollar américain',
+    CAD: 'Dollar canadien',
+    JPY: 'Yen',
+    GBP: 'Livre sterling',
+    NOK: 'Couronne norvégienne',
+    BTC: 'Bitcoin'
+};
+
+
 // mon composant principal, qui sera ici le seul composant de l'appli
 class FixerUI extends React.Component {
     // besoin d'un constructeur dès qu'on veut utiliser les états
@@ -16,7 +29,7 @@ class FixerUI extends React.Component {
         this.state = {
             statut: 'starting',
             montantEntree: 0,
-            deviseSortie: 'USD',
+            deviseSortie: Object.keys(devisesSupportees)[0], // plutôt qu'hardcoder ;-)
             taux: {} // vide, comme ça on peut vérifier si l'appli est prête ou pas
         };
 
@@ -40,7 +53,7 @@ class FixerUI extends React.Component {
             }
         };
 
-        xhr.open('GET', 'http://data.fixer.io/api/latest?access_key=' + apikey);
+        xhr.open('GET', 'http://data.fixer.io/api/latest?access_key=' + apikey + '&symbols=' + Object.keys(devisesSupportees).join(','));
         xhr.send();
 
 
@@ -79,13 +92,14 @@ class FixerUI extends React.Component {
         // on calcule le montant converti à chaque nouveau rendu
         // car le rendu ne se redéclenchera que lorsque l'utilisateur modifiera le montant ou la devise
         let montantSortie = this.convertir();
+
         
         return (
             <div>
                 <input type="number" value={this.state.montantEntree} onChange={this.handleMontantChange} />
                 <select value={this.state.deviseSortie} onChange={this.handleDeviseSortieChange}>
-                    {Object.keys(this.state.taux).map((dev, index) => 
-                        <option key={index} value={dev}>{dev}</option>
+                    {Object.keys(devisesSupportees).map((dev, index) => 
+                        <option key={index} value={dev}>{devisesSupportees[dev]}</option>
                     )}
                 </select>
                 <output>{montantSortie}</output>
