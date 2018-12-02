@@ -95,7 +95,7 @@ class FixerUI extends React.Component {
 
         
         return (
-            <div>
+            <form>
                 <input type="number" value={this.state.montantEntree} onChange={this.handleMontantChange} />
                 <select value={this.state.deviseSortie} onChange={this.handleDeviseSortieChange}>
                     {Object.keys(devisesSupportees).map((dev, index) => 
@@ -103,7 +103,7 @@ class FixerUI extends React.Component {
                     )}
                 </select>
                 <output>{montantSortie}</output>
-            </div>
+            </form>
         );
     }
 }
