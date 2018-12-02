@@ -28,9 +28,18 @@ class FixerUI extends React.Component {
         this.setState({deviseSortie: e.target.value});
     }
 
+    // fonction de conversion, qui se base sur les états du composant
+    convertir() {
+        // on va beaucoup piocher dans les états, créons-nous un petit raccourci
+        let s = this.state;
+        return (s.montantEntree * 2.34567).toFixed(2);
+    }
+
     render() {
-        // pour contrôler les états du composant
-        console.log(this.state);
+        // on calcule le montant converti à chaque nouveau rendu
+        // car le rendu ne se redéclenchera que lorsque l'utilisateur modifiera le montant ou la devise
+        let montantSortie = this.convertir();
+        
         return (
             <div>
                 <input type="number" value={this.state.montantEntree} onChange={this.handleMontantChange} />
@@ -39,7 +48,7 @@ class FixerUI extends React.Component {
                     <option value="CAD">CAD</option>
                     <option value="GBP">GBP</option>
                 </select>
-                <output>42</output>
+                <output>{montantSortie}</output>
             </div>
         );
     }
