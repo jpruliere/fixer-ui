@@ -1,6 +1,12 @@
 // les imports obligatoires
 import React from 'react';
 import ReactDOM from 'react-dom';
+import apikey from './api-key'; // pensez à générer votre clé API
+
+/** api-key.js devrait ressembler à :
+ * let apikey = 'VOTRE_API_KEY';
+ * export default apikey;
+ */
 
 // mon composant principal, qui sera ici le seul composant de l'appli
 class FixerUI extends React.Component {
@@ -9,8 +15,27 @@ class FixerUI extends React.Component {
         super(props);
         this.state = {
             montantEntree: 0,
-            deviseSortie: 'USD'
+            deviseSortie: 'USD',
+            taux: {} // vide, comme ça on peut vérifier si l'appli est prête ou pas
         };
+
+        // appel à l'API
+        let xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+            if (xhr.status === 200) { // le strict minimum : vérifier que l'appel a retourné un HTTP OK
+                let rep = JSON.parse(xhr.responseText);
+                this.setState({
+                    taux: rep.rates
+                });
+            } else {
+                console.log('Erreur :-/');
+            }
+        };
+
+        xhr.open('GET', 'http://data.fixer.io/api/latest?access_key=' + apikey);
+        xhr.send();
+
+
         // nécessaire au bon fonctionnement des écouteurs d'événements
         this.handleMontantChange = this.handleMontantChange.bind(this);
         this.handleDeviseSortieChange = this.handleDeviseSortieChange.bind(this);
@@ -32,7 +57,9 @@ class FixerUI extends React.Component {
     convertir() {
         // on va beaucoup piocher dans les états, créons-nous un petit raccourci
         let s = this.state;
-        return (s.montantEntree * 2.34567).toFixed(2);
+        // maintenant, on peut éviter une conversion faite trop tôt
+        if (!s.taux) return 0;
+        return (s.montantEntree * s.taux[s.deviseSortie]).toFixed(2);
     }
 
     render() {
