@@ -47,8 +47,8 @@ class FixerUI extends React.Component {
     }
 
     // on verrouille le "re-rendu" du composant si l'API n'a pas répondu OK
-    shouldComponentUpdate() {
-        return this.state.statut === 'running';
+    shouldComponentUpdate(nProps, nState) {
+        return this.state.statut === 'running' || nState.statut === 'running';
     }
 
     // convention : handle + nature de l'action + nom de l'event
@@ -81,9 +81,9 @@ class FixerUI extends React.Component {
             <div>
                 <input type="number" value={this.state.montantEntree} onChange={this.handleMontantChange} />
                 <select value={this.state.deviseSortie} onChange={this.handleDeviseSortieChange}>
-                    <option value="USD">USD</option>
-                    <option value="CAD">CAD</option>
-                    <option value="GBP">GBP</option>
+                    {Object.keys(this.state.taux).map((dev, index) => 
+                        <option key={index} value={dev}>{dev}</option>
+                    )}
                 </select>
                 <output>{montantSortie}</output>
             </div>
