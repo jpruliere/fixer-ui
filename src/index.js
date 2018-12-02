@@ -23,8 +23,11 @@ class FixerUI extends React.Component {
         // appel à l'API
         let xhr = new XMLHttpRequest();
         xhr.onload = () => {
-            if (xhr.status === 200) { // le strict minimum : vérifier que l'appel a retourné un HTTP OK
-                let rep = JSON.parse(xhr.responseText);
+            let rep;
+            if (
+                xhr.status === 200 && // le strict minimum : vérifier que l'appel a retourné un HTTP OK
+                (rep = JSON.parse(xhr.responseText)).success // on vérifie en plus le flag success qui peut être à false malgré un HTTP OK
+            ) { 
                 this.setState({
                     statut: 'running',
                     taux: rep.rates
@@ -33,7 +36,7 @@ class FixerUI extends React.Component {
                 this.setState({
                     statut: 'crashing'
                 });
-                console.log('Erreur :-/');
+                console.log(rep.error || xhr.status); // si error existe, on le log, sinon c'est une erreur réseau, on log le code HTTP
             }
         };
 
