@@ -14,6 +14,7 @@ class FixerUI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            statut: 'starting',
             montantEntree: 0,
             deviseSortie: 'USD',
             taux: {} // vide, comme ça on peut vérifier si l'appli est prête ou pas
@@ -25,9 +26,13 @@ class FixerUI extends React.Component {
             if (xhr.status === 200) { // le strict minimum : vérifier que l'appel a retourné un HTTP OK
                 let rep = JSON.parse(xhr.responseText);
                 this.setState({
+                    statut: 'running',
                     taux: rep.rates
                 });
             } else {
+                this.setState({
+                    statut: 'crashing'
+                });
                 console.log('Erreur :-/');
             }
         };
@@ -39,6 +44,11 @@ class FixerUI extends React.Component {
         // nécessaire au bon fonctionnement des écouteurs d'événements
         this.handleMontantChange = this.handleMontantChange.bind(this);
         this.handleDeviseSortieChange = this.handleDeviseSortieChange.bind(this);
+    }
+
+    // on verrouille le "re-rendu" du composant si l'API n'a pas répondu OK
+    shouldComponentUpdate() {
+        return this.state.statut === 'running';
     }
 
     // convention : handle + nature de l'action + nom de l'event
@@ -58,7 +68,7 @@ class FixerUI extends React.Component {
         // on va beaucoup piocher dans les états, créons-nous un petit raccourci
         let s = this.state;
         // maintenant, on peut éviter une conversion faite trop tôt
-        if (!s.taux) return 0;
+        if (s.statut !== 'running') return (0).toFixed(2);
         return (s.montantEntree * s.taux[s.deviseSortie]).toFixed(2);
     }
 
