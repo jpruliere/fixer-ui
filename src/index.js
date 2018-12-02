@@ -1,6 +1,7 @@
 // les imports obligatoires
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css';
 import apikey from './api-key'; // pensez à générer votre clé API
 
 /** api-key.js devrait ressembler à :
@@ -33,6 +34,9 @@ class FixerUI extends React.Component {
             taux: {} // vide, comme ça on peut vérifier si l'appli est prête ou pas
         };
 
+        // le body va avoir pour class le statut de l'application
+        document.body.classList.add(this.state.statut);
+
         // appel à l'API
         let xhr = new XMLHttpRequest();
         xhr.onload = () => {
@@ -64,6 +68,9 @@ class FixerUI extends React.Component {
 
     // on verrouille le "re-rendu" du composant si l'API n'a pas répondu OK
     shouldComponentUpdate(nProps, nState) {
+        // on profite de chaque appel pour vérifier s'il faut mettre à jour la class du body
+        if (this.state.statut !== nState.statut) document.body.classList.replace(this.state.statut, nState.statut);
+
         return this.state.statut === 'running' || nState.statut === 'running';
     }
 
@@ -95,15 +102,18 @@ class FixerUI extends React.Component {
 
         
         return (
-            <form>
-                <input type="number" value={this.state.montantEntree} onChange={this.handleMontantChange} />
-                <select value={this.state.deviseSortie} onChange={this.handleDeviseSortieChange}>
-                    {Object.keys(devisesSupportees).map((dev, index) => 
-                        <option key={index} value={dev}>{devisesSupportees[dev]}</option>
-                    )}
-                </select>
-                <output>{montantSortie}</output>
-            </form>
+            <main>
+                <h1>FixerUI</h1>
+                <form>
+                    <input type="number" value={this.state.montantEntree} onChange={this.handleMontantChange} />
+                    <select value={this.state.deviseSortie} onChange={this.handleDeviseSortieChange}>
+                        {Object.keys(devisesSupportees).map((dev, index) => 
+                            <option key={index} value={dev}>{devisesSupportees[dev]}</option>
+                        )}
+                    </select>
+                    <output>{montantSortie}</output>
+                </form>
+            </main>
         );
     }
 }

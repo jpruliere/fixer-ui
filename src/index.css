@@ -1,0 +1,77 @@
+body {
+    font-size: 25px;
+    margin: 0 15%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #444;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body.starting main, body.crashing main {
+    opacity: 0;
+    position: absolute;
+}
+
+body.starting #root::before {
+    content: 'L\'application démarre, merci de patienter...';
+    display: block;
+    color: #aaa;
+    text-align: center;
+    font-size: 3rem;
+}
+
+body.crashing #root::before {
+    content: 'Oups ! Quelque chose a mal tourné...';
+    display: block;
+    color: #faa;
+    text-align: center;
+    font-size: 3rem;
+}
+
+main {
+    display: flex;
+    padding: 1em;
+    transition: opacity .8s;
+}
+
+h1 {
+    margin: 0 .8em 0 0;
+    font-weight: 300;
+    color: #888;
+    text-align: center;
+    font-size: 2.4em;
+}
+
+form {
+    display: flex;
+    align-items: center;
+}
+
+form > * {
+    background-color: transparent;
+    border: none;
+    margin: 0 .3rem;
+    padding: .4rem;
+    line-height: 1.3rem;
+    font-size: 1rem;
+}
+
+input {
+    width: 5rem;
+}
+
+select {
+    order: 2;
+}
+
+output {
+    min-width: 6rem;
+}
+
+output::before {
+    content: 'Euro ↔';
+    display: inline-block;
+    margin-right: 1rem;
+}
