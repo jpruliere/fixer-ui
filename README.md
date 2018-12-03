@@ -11,12 +11,16 @@ Ce projet utilise React (et ReactDOM), tout le reste est vanilla.
 ## Configuration
 
 Pour faire fonctionner l'application, créez un dossier vide puis dans ce dossier :
-    git clone URL_DE_VOTRE_FORK_OU_DE_CE_REPO .
-    npm install
+```
+git clone URL_DE_VOTRE_FORK_OU_DE_CE_REPO .
+npm install
+```
 
 A ce stade, il ne vous manquera qu'une clé d'API que vous pouvez générer gratuitement sur le site de Fixer. Créez alors le fichier src/api-key.js suivant :
-    let apikey = 'd4787c1b8d07c0b01b18f5b2d29db6ce';
-    export default apikey;
+```
+let apikey = 'd4787c1b8d07c0b01b18f5b2d29db6ce';
+export default apikey;
+```
 
 De retour dans votre terminal, lancer `npm start` pour tester l'appli et `npm run build` pour compiler l'application dans un dossier `build`.
 
