@@ -18,7 +18,7 @@ npm install
 
 A ce stade, il ne vous manquera qu'une clé d'API que vous pouvez générer gratuitement sur le site de Fixer. Créez alors le fichier src/api-key.js suivant :
 ```
-let apikey = 'd4787c1b8d07c0b01b18f5b2d29db6ce';
+let apikey = 'VOTRE_CLE';
 export default apikey;
 ```
 
